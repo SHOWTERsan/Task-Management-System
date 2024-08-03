@@ -1,4 +1,4 @@
-package ru.santurov.task_management_system.config;
+package ru.santurov.task_management_system.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -17,9 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import ru.santurov.task_management_system.exceptions.JwtAuthenticationEntryPoint;
 import ru.santurov.task_management_system.services.UserService;
-import ru.santurov.task_management_system.utils.JwtAuthenticationFilter;
 
 import java.util.List;
 

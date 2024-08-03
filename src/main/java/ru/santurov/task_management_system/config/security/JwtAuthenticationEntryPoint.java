@@ -1,4 +1,4 @@
-package ru.santurov.task_management_system.exceptions;
+package ru.santurov.task_management_system.config.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
