@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import ru.santurov.task_management_system.exceptions.JwtAuthenticationEntryPoint;
 import ru.santurov.task_management_system.services.UserService;
 import ru.santurov.task_management_system.utils.JwtAuthenticationFilter;
 
@@ -53,7 +54,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint()));
 
         return http.build();
     }
@@ -65,6 +67,11 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(getPasswordEncoder());
 
         return authProvider;
+    }
+
+    @Bean
+    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
     }
 
     @Bean
