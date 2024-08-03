@@ -13,7 +13,7 @@ import ru.santurov.task_management_system.DTO.SignUpRequestDTO;
 import ru.santurov.task_management_system.services.AuthenticationService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationService authenticationService;
