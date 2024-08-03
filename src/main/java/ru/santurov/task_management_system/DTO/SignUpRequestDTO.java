@@ -22,8 +22,8 @@ public class SignUpRequestDTO {
     @Email(message = "Email адрес должен быть в формате user@example.com")
     private String email;
 
-    @Schema(description = "Пароль", example = "my_1secret1_password")
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[^\\w\\s]).{8,}", message = "Пароль должен содержать не менее 8 символов, включая 1 цифру и 1 спецсимвол")
+    @Schema(description = "Пароль", example = "my!1secret1#password")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[^\\w\\s]).{8,255}", message = "Пароль должен содержать не менее 8 символов, включая 1 цифру и 1 спецсимвол")
     @Size(min = 8, max = 255, message = "Длина пароля должна быть от 8 до 255 символов")
     @NotBlank(message = "Пароль не может быть пустыми")
     private String password;
