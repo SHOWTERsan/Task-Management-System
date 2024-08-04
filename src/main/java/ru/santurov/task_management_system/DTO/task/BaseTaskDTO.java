@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Schema(description = "Базовый DTO для задания")
 public class BaseTaskDTO {
@@ -18,6 +20,6 @@ public class BaseTaskDTO {
     @Schema(description = "Приоритет задания (возможные значения: HIGH, MEDIUM, LOW)", example = "HIGH")
     private String priority;
 
-    @Schema(description = "Имя исполнителя задания", example = "Jane Smith")
-    private String performerUsername;
+    @Schema(description = "Исполнители задания", example = "[\"Jon\", \"Anna\", \"Vasya\"]")
+    private List<String> performers;
 }

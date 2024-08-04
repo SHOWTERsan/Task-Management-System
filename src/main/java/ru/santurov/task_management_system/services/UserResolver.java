@@ -12,7 +12,7 @@ public class UserResolver {
     private final UserRepository userRepository;
 
     public User resolveByUsername(String username) {
-        return userRepository.findByUsername(username)
+        return userRepository.findByUsername(username.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + username));
     }
 }

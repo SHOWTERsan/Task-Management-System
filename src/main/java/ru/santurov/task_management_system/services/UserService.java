@@ -39,7 +39,8 @@ public class UserService {
         if (repository.existsByEmail(user.getEmail())) {
             throw new EmailAlreadyExistsException("Пользователь с таким email уже существует");
         }
-
+        user.setUsername(user.getUsername().toLowerCase());
+        user.setEmail(user.getEmail().toLowerCase());
         return save(user);
     }
 
@@ -49,7 +50,7 @@ public class UserService {
      * @return пользователь
      */
     public User getByUsername(String username) {
-        return repository.findByUsername(username)
+        return repository.findByUsername(username.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
     }
