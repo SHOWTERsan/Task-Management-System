@@ -26,9 +26,9 @@ public interface TaskMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateTaskFromDto(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, @Context UserResolver userResolver);
 
-    default void updatePerformer(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, UserResolver userResolver) {
+    default void updatePerformers(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, UserResolver userResolver) {
         List<String> performers = taskUpdateDTO.getPerformers();
-        if (!performers.isEmpty()) {
+        if (performers != null || !performers.isEmpty()) {
             List<User> mappedPerformers = performers.stream()
                             .map(userResolver::resolveByUsername)
                             .toList();

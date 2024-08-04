@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.santurov.task_management_system.DTO.task.*;
+import ru.santurov.task_management_system.exceptions.InsufficientPermissionsException;
 import ru.santurov.task_management_system.exceptions.ResourceNotFoundException;
 import ru.santurov.task_management_system.models.Task;
 import ru.santurov.task_management_system.repositories.TaskRepository;
@@ -23,6 +24,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserResolver userResolver;
     private final TaskMapper taskMapper;
+    private final TaskAuthorizationService taskAuthorizationService;
 
     public TaskResponseDTO getTask(Long id) {
         Task task = taskRepository.findById(id)
@@ -40,9 +42,14 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
 
-        taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
-        taskMapper.updatePerformer(taskUpdateDTO, task, userResolver);
-
+        if (taskAuthorizationService.canUpdateTaskStatus(task, taskUpdateDTO)) {
+            taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
+        }
+        if (taskAuthorizationService.canUpdateTask(task)) {
+            taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
+            taskMapper.updatePerformers(taskUpdateDTO, task, userResolver);
+        }
+//todo add exceptions for empty body and accessing inappropriate method
         task = taskRepository.save(task);
         return taskMapper.toTaskResponseDTO(task);
     }
@@ -64,12 +71,16 @@ public class TaskService {
     @Transactional
     public void deleteTask(Long id) {
         try {
+            Task task = taskRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
+            if (!taskAuthorizationService.canUpdateTask(task))
+                throw new InsufficientPermissionsException("Нужно быть автором задачи чтобы удалить.");
             if (!taskRepository.existsById(id)) {
-                throw new ResourceNotFoundException("Задание с id " + id + " не найдено");
+                throw new ResourceNotFoundException("Задача с id " + id + " не найдена");
             }
             taskRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException("Задание с id " + id + " не найдено");
+            throw new ResourceNotFoundException("Задача с id " + id + " не найдена");
         }
     }
 }
