@@ -2,14 +2,12 @@ package ru.santurov.task_management_system.DTO.task;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(description = "DTO для пагинированного ответа")
-public class PaginatedResponseDTO<T> extends BaseTaskDTO {
+public class PaginatedResponseDTO<T> {
 
     @Schema(description = "Список данных на текущей странице")
     private List<T> data;

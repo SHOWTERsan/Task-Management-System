@@ -1,35 +1,30 @@
 package ru.santurov.task_management_system.services.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.springframework.security.core.context.SecurityContextHolder;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.models.Task;
+import ru.santurov.task_management_system.services.UserResolver;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserResolver.class)
 public interface TaskMapper {
 
-    TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
-
-    // Mapping Task to TaskDTO
     TaskDTO toTaskDTO(Task task);
 
-    // Mapping TaskDTO to Task
     Task toTask(TaskDTO taskDTO);
 
-    // Mapping Task to TaskResponseDTO
-    @Mapping(source = "author.username", target = "author.username")
-    @Mapping(source = "performer.username", target = "performer.username")
+    @Mapping(target = "author", source = "author")
+    @Mapping(target = "performer", source = "performer")
     TaskResponseDTO toTaskResponseDTO(Task task);
 
-    // Mapping Task to TaskListDTO
-    @Mapping(source = "author.username", target = "authorName")
-    @Mapping(source = "performer.username", target = "performerName")
-    TaskListDTO toTaskListDTO(Task task);
+    @Mapping(target = "author", expression = "java(userResolver.resolveByUsername(SecurityContextHolder.getContext().getAuthentication().getName()))")
+    @Mapping(target = "performer", expression = "java(userResolver.resolveByUsername(taskCreateDTO.getPerformerUsername()))")
+    @Mapping(target = "status", constant = "PENDING")
+    Task toTask(TaskCreateDTO taskCreateDTO, @Context UserResolver userResolver, @Context SecurityContextHolder securityContext);
 
-    // Mapping TaskCreateDTO to Task
-    Task toTask(TaskCreateDTO taskCreateDTO);
-
-    // Mapping TaskUpdateDTO to Task
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "performer", ignore = true)
     Task toTask(TaskUpdateDTO taskUpdateDTO);
 }

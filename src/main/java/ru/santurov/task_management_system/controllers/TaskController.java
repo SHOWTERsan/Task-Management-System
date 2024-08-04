@@ -34,19 +34,19 @@ public class TaskController {
 
     @Operation(summary = "Задание по id")
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTask(@PathVariable Long id) {
-        TaskDTO taskDTO = taskService.getTask(id);
-        return ResponseEntity.ok(taskDTO);
+    public ResponseEntity<TaskResponseDTO> getTask(@PathVariable Long id) {
+        TaskResponseDTO taskResponseDTO = taskService.getTask(id);
+        return ResponseEntity.ok(taskResponseDTO);
     }
 
     @Operation(summary = "Все задания(постранично)")
     @GetMapping
-    public ResponseEntity<PaginatedResponseDTO<TaskListDTO>> getTasks(
+    public ResponseEntity<PaginatedResponseDTO<TaskResponseDTO>> getTasks(
             @Parameter(description = "Номер страницы для пагинации", example = "0")
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Размер страницы для пагинации", example = "10")
             @RequestParam(defaultValue = "10") int size) {
-        PaginatedResponseDTO<TaskListDTO> paginatedTasks = taskService.getTasks(page, size);
+        PaginatedResponseDTO<TaskResponseDTO> paginatedTasks = taskService.getTasks(page, size);
         return ResponseEntity.ok(paginatedTasks);
     }
 

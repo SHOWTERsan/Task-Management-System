@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.exceptions.ResourceNotFoundException;
@@ -21,16 +21,17 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserResolver userResolver;
     private final TaskMapper taskMapper;
 
-    public TaskDTO getTask(Long id) {
+    public TaskResponseDTO getTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
-        return taskMapper.toTaskDTO(task);
+        return taskMapper.toTaskResponseDTO(task);
     }
-    //TODO наложить ограничения на такс дто
+
     public TaskResponseDTO createTask(TaskCreateDTO taskCreateDTO) {
-        Task task = taskMapper.toTask(taskCreateDTO);
+        Task task = taskMapper.toTask(taskCreateDTO, userResolver, new SecurityContextHolder());
         task = taskRepository.save(task);
         return taskMapper.toTaskResponseDTO(task);
     }
@@ -43,10 +44,10 @@ public class TaskService {
         return taskMapper.toTaskResponseDTO(task);
     }
 
-    public PaginatedResponseDTO<TaskListDTO> getTasks(int page, int size) {
+    public PaginatedResponseDTO<TaskResponseDTO> getTasks(int page, int size) {
         Page<Task> tasksPage = taskRepository.findAll(PageRequest.of(page, size));
-        List<TaskListDTO> taskDTOs = tasksPage.stream()
-                .map(taskMapper::toTaskListDTO)
+        List<TaskResponseDTO> taskDTOs = tasksPage.stream()
+                .map(taskMapper::toTaskResponseDTO)
                 .collect(Collectors.toList());
         return new PaginatedResponseDTO<>(
                 taskDTOs,
