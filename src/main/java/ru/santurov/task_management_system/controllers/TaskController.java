@@ -2,6 +2,7 @@ package ru.santurov.task_management_system.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,11 @@ public class TaskController {
     }
 
     @Operation(summary = "Редактирование задания по id")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> updateTask(
             @PathVariable Long id,
-            @RequestBody TaskUpdateDTO taskUpdateDTO) {
-        taskUpdateDTO.setId(id);
-        TaskResponseDTO taskResponseDTO = taskService.updateTask(taskUpdateDTO);
+            @Valid @RequestBody TaskUpdateDTO taskUpdateDTO) {
+        TaskResponseDTO taskResponseDTO = taskService.updateTask(taskUpdateDTO, id);
         return ResponseEntity.ok(taskResponseDTO);
     }
 

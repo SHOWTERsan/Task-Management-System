@@ -1,7 +1,6 @@
 package ru.santurov.task_management_system.DTO.task;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -9,7 +8,6 @@ import lombok.Data;
 public class BaseTaskDTO {
 
     @Schema(description = "Название задания", example = "Fix bug in login")
-    @NotBlank(message = "Название не может быть пустым")
     private String title;
 
     @Schema(description = "Описание задания", example = "Fix the bug that causes login failure for users")

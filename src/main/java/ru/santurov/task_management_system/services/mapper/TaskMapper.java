@@ -1,8 +1,6 @@
 package ru.santurov.task_management_system.services.mapper;
 
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.models.Task;
@@ -10,10 +8,6 @@ import ru.santurov.task_management_system.services.UserResolver;
 
 @Mapper(componentModel = "spring", uses = UserResolver.class)
 public interface TaskMapper {
-
-    TaskDTO toTaskDTO(Task task);
-
-    Task toTask(TaskDTO taskDTO);
 
     @Mapping(target = "author", source = "author")
     @Mapping(target = "performer", source = "performer")
@@ -26,5 +20,13 @@ public interface TaskMapper {
 
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "performer", ignore = true)
-    Task toTask(TaskUpdateDTO taskUpdateDTO);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateTaskFromDto(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, @Context UserResolver userResolver);
+
+    default void updatePerformer(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, UserResolver userResolver) {
+        String performerUsername = taskUpdateDTO.getPerformerUsername();
+        if (performerUsername != null) {
+            task.setPerformer(userResolver.resolveByUsername(performerUsername));
+        }
+    }
 }

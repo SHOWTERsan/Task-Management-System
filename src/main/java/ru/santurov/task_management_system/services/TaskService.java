@@ -36,13 +36,17 @@ public class TaskService {
         return taskMapper.toTaskResponseDTO(task);
     }
 
-    public TaskResponseDTO updateTask(TaskUpdateDTO taskUpdateDTO) {
-        Task task = taskRepository.findById(taskUpdateDTO.getId())
+    public TaskResponseDTO updateTask(TaskUpdateDTO taskUpdateDTO, Long id) {
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
-        taskMapper.toTask(taskUpdateDTO);
+
+        taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
+        taskMapper.updatePerformer(taskUpdateDTO, task, userResolver);
+
         task = taskRepository.save(task);
         return taskMapper.toTaskResponseDTO(task);
     }
+
 
     public PaginatedResponseDTO<TaskResponseDTO> getTasks(int page, int size) {
         Page<Task> tasksPage = taskRepository.findAll(PageRequest.of(page, size));
