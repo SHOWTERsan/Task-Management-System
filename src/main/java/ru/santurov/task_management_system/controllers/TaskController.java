@@ -40,8 +40,8 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseDTO);
     }
 
-    @Operation(summary = "Задача по id")
-    @GetMapping("/{id}")
+    @Operation(summary = "Задача с комментариями по id")
+    @GetMapping("/{id}/comments")
     public ResponseEntity<TaskCommentResponseDTO> getTaskWithComments(@PathVariable Long id) {
         TaskCommentResponseDTO taskResponseDTO = taskService.getTaskWithComments(id);
         return ResponseEntity.ok(taskResponseDTO);
