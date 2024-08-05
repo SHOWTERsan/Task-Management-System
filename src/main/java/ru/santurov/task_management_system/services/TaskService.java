@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.exceptions.InsufficientPermissionsException;
 import ru.santurov.task_management_system.exceptions.ResourceNotFoundException;
@@ -23,6 +24,7 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserResolver userResolver;
+    private final CommentResolver commentResolver;
     private final TaskMapper taskMapper;
     private final TaskAuthorizationService taskAuthorizationService;
 
@@ -30,6 +32,12 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена."));
         return taskMapper.toTaskResponseDTO(task);
+    }
+
+    public TaskCommentResponseDTO getTaskWithComments(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена."));
+        return taskMapper.toTaskCommentResponseDTO(task, commentResolver);
     }
 
     public TaskResponseDTO createTask(TaskCreateDTO taskCreateDTO) {

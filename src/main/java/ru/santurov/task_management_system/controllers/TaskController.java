@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.services.TaskService;
 
@@ -23,7 +24,7 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseDTO);
     }
 
-    @Operation(summary = "Редактирование задания по id")
+    @Operation(summary = "Редактирование задачи по id")
     @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> updateTask(
             @PathVariable Long id,
@@ -32,14 +33,21 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseDTO);
     }
 
-    @Operation(summary = "Задание по id")
+    @Operation(summary = "Задача по id")
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> getTask(@PathVariable Long id) {
         TaskResponseDTO taskResponseDTO = taskService.getTask(id);
         return ResponseEntity.ok(taskResponseDTO);
     }
 
-    @Operation(summary = "Все задания(постранично)")
+    @Operation(summary = "Задача по id")
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskCommentResponseDTO> getTaskWithComments(@PathVariable Long id) {
+        TaskCommentResponseDTO taskResponseDTO = taskService.getTaskWithComments(id);
+        return ResponseEntity.ok(taskResponseDTO);
+    }
+
+    @Operation(summary = "Все задачи(постранично)")
     @GetMapping
     public ResponseEntity<PaginatedResponseDTO<TaskResponseDTO>> getTasks(
             @Parameter(description = "Номер страницы для пагинации", example = "0")

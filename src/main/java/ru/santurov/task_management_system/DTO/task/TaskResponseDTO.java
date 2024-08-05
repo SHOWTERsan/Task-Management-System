@@ -15,7 +15,6 @@ public class TaskResponseDTO {
     private Long id;
 
     @Schema(description = "Название задания")
-    @NotBlank(message = "Название не может быть пустым")
     private String title;
 
     @Schema(description = "Описание задания")

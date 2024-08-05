@@ -2,19 +2,24 @@ package ru.santurov.task_management_system.services.mapper;
 
 import org.mapstruct.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.models.Task;
 import ru.santurov.task_management_system.models.User;
+import ru.santurov.task_management_system.services.CommentResolver;
 import ru.santurov.task_management_system.services.UserResolver;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = UserResolver.class)
+@Mapper(componentModel = "spring", uses = {UserResolver.class, CommentResolver.class})
 public interface TaskMapper {
 
     @Mapping(target = "author", source = "author")
     @Mapping(target = "performers", source = "performers")
     TaskResponseDTO toTaskResponseDTO(Task task);
+
+    @Mapping(target = "comments", expression = "java(commentResolver.resolveCommentsByTaskId(task.getId()))")
+    TaskCommentResponseDTO toTaskCommentResponseDTO(Task task, @Context CommentResolver commentResolver);
 
     @Mapping(target = "author", expression = "java(userResolver.resolveByUsername(SecurityContextHolder.getContext().getAuthentication().getName()))")
     @Mapping(target = "performers", expression = "java(taskCreateDTO.getPerformers().stream().map(userResolver::resolveByUsername).toList())")
