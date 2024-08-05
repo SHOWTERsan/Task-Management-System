@@ -32,15 +32,14 @@ public class UserService {
      * @return созданный пользователь
      */
     public User create(User user) {
+        user.setUsername(user.getUsername().toLowerCase());
+        user.setEmail(user.getEmail().toLowerCase());
         if (repository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
         }
-
         if (repository.existsByEmail(user.getEmail())) {
             throw new EmailAlreadyExistsException("Пользователь с таким email уже существует");
         }
-        user.setUsername(user.getUsername().toLowerCase());
-        user.setEmail(user.getEmail().toLowerCase());
         return save(user);
     }
 

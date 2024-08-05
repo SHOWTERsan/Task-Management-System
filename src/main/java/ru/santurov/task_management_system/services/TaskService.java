@@ -28,7 +28,7 @@ public class TaskService {
 
     public TaskResponseDTO getTask(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
+                .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена."));
         return taskMapper.toTaskResponseDTO(task);
     }
 
@@ -40,16 +40,20 @@ public class TaskService {
 
     public TaskResponseDTO updateTask(TaskUpdateDTO taskUpdateDTO, Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
+                .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена."));
 
-        if (taskAuthorizationService.canUpdateTaskStatus(task, taskUpdateDTO)) {
-            taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
-        }
+        // Проверка, может ли текущий пользователь обновлять задачу
         if (taskAuthorizationService.canUpdateTask(task)) {
+            // Обновление всех полей задачи
             taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
             taskMapper.updatePerformers(taskUpdateDTO, task, userResolver);
+        } else if (taskAuthorizationService.canUpdateTaskStatus(task, taskUpdateDTO)) {
+            // Обновление только статуса задачи
+            taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
+        } else {
+            throw new InsufficientPermissionsException("Недостаточно прав для выполнения этого действия.");
         }
-//todo add exceptions for empty body and accessing inappropriate method
+
         task = taskRepository.save(task);
         return taskMapper.toTaskResponseDTO(task);
     }
