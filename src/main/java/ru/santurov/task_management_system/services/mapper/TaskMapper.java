@@ -27,12 +27,14 @@ public interface TaskMapper {
 
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "performers", ignore = true)
+    @Mapping(target = "status", expression = "java(taskUpdateDTO.getStatus() != null ? Enum.valueOf(TaskStatus.class, taskUpdateDTO.getStatus().toUpperCase()) : task.getStatus())")
+    @Mapping(target = "priority", expression = "java(taskUpdateDTO.getPriority() != null ? Enum.valueOf(TaskPriority.class, taskUpdateDTO.getPriority().toUpperCase()) : task.getPriority())")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateTaskFromDto(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, @Context UserResolver userResolver);
 
     default void updatePerformers(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task, UserResolver userResolver) {
         List<String> performers = taskUpdateDTO.getPerformers();
-        if (performers != null || !performers.isEmpty()) {
+        if (performers != null && !performers.isEmpty()) {
             List<User> mappedPerformers = performers.stream()
                             .map(userResolver::resolveByUsername)
                             .toList();

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 @Schema(description = "DTO для обновления задания")
 public class TaskUpdateDTO extends BaseTaskDTO {
 
-    @Pattern(regexp = "PENDING|PROCESSING|COMPLETED", message = "Указан неверный статус")
+    @Pattern(regexp = "(?i)PENDING|PROCESSING|COMPLETED", message = "Указан неверный статус")
     @Schema(description = "Статус задания (возможные значения: PENDING, PROCESSING, COMPLETED)", example = "COMPLETED")
     private String status;
 

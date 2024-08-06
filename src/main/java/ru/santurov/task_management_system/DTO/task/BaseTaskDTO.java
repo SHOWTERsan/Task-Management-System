@@ -16,7 +16,7 @@ public class BaseTaskDTO {
     @Schema(description = "Описание задания", example = "Fix the bug that causes login failure for users")
     private String description;
 
-    @Pattern(regexp = "HIGH|MEDIUM|LOW", message = "Указан неверный приоритет")
+    @Pattern(regexp = "(?i)HIGH|MEDIUM|LOW", message = "Указан неверный приоритет")
     @Schema(description = "Приоритет задания (возможные значения: HIGH, MEDIUM, LOW)", example = "HIGH")
     private String priority;
 
