@@ -47,6 +47,20 @@ public class TaskController {
         return ResponseEntity.ok(taskResponseDTO);
     }
 
+    @Operation(summary = "Получить задачи по автору или исполнителю с комментариями (постранично)")
+    @GetMapping("/author/{authorId}")
+    public ResponseEntity<PaginatedResponseDTO<TaskCommentResponseDTO>> getTasksByAuthorWithComments(
+            @PathVariable Long authorId,
+            @Parameter(description = "Номер страницы для пагинации", example = "0")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Размер страницы для пагинации", example = "10")
+            @RequestParam(defaultValue = "10") int size) {
+
+        PaginatedResponseDTO<TaskCommentResponseDTO> paginatedTasks = taskService.getTasksByAuthorWithComments(authorId, page, size);
+        return ResponseEntity.ok(paginatedTasks);
+    }
+
+
     @Operation(summary = "Все задачи(постранично)")
     @GetMapping
     public ResponseEntity<PaginatedResponseDTO<TaskResponseDTO>> getTasks(

@@ -41,7 +41,7 @@ public class TaskService {
     }
 
     public TaskResponseDTO createTask(TaskCreateDTO taskCreateDTO) {
-        Task task = taskMapper.toTask(taskCreateDTO, userResolver, new SecurityContextHolder());
+        Task task = taskMapper.toTask(taskCreateDTO, userResolver);
         task = taskRepository.save(task);
         return taskMapper.toTaskResponseDTO(task);
     }
@@ -80,6 +80,21 @@ public class TaskService {
         );
     }
 
+    public PaginatedResponseDTO<TaskCommentResponseDTO> getTasksByAuthorWithComments(Long authorId, int page, int size) {
+        Page<Task> tasksPage = taskRepository.findTasksByAuthor_Id(authorId, PageRequest.of(page, size));
+        if (tasksPage.isEmpty()) {
+            throw new ResourceNotFoundException("Автор с id " + authorId + " не существует или нее имеет опубликованных задач.");
+        }
+        List<TaskCommentResponseDTO> taskDTOs = tasksPage.stream()
+                .map((Task task) -> taskMapper.toTaskCommentResponseDTO(task, commentResolver))
+                .collect(Collectors.toList());
+        return new PaginatedResponseDTO<>(
+                taskDTOs,
+                tasksPage.getNumber(),
+                tasksPage.getTotalPages(),
+                tasksPage.getTotalElements()
+        );
+    }
     @Transactional
     public void deleteTask(Long id) {
         try {
