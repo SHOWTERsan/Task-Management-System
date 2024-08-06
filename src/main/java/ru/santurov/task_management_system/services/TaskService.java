@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.*;
@@ -84,6 +83,21 @@ public class TaskService {
         Page<Task> tasksPage = taskRepository.findTasksByAuthor_Id(authorId, PageRequest.of(page, size));
         if (tasksPage.isEmpty()) {
             throw new ResourceNotFoundException("Автор с id " + authorId + " не существует или нее имеет опубликованных задач.");
+        }
+        List<TaskCommentResponseDTO> taskDTOs = tasksPage.stream()
+                .map((Task task) -> taskMapper.toTaskCommentResponseDTO(task, commentResolver))
+                .collect(Collectors.toList());
+        return new PaginatedResponseDTO<>(
+                taskDTOs,
+                tasksPage.getNumber(),
+                tasksPage.getTotalPages(),
+                tasksPage.getTotalElements()
+        );
+    }
+    public PaginatedResponseDTO<TaskCommentResponseDTO> getTasksByPerformerWithComments(Long performerId, int page, int size) {
+        Page<Task> tasksPage = taskRepository.findTasksByPerformers_Id(performerId, PageRequest.of(page, size));
+        if (tasksPage.isEmpty()) {
+            throw new ResourceNotFoundException("Исполнитель с id " + performerId + " не существует или нее имеет задач.");
         }
         List<TaskCommentResponseDTO> taskDTOs = tasksPage.stream()
                 .map((Task task) -> taskMapper.toTaskCommentResponseDTO(task, commentResolver))

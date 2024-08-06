@@ -1,7 +1,6 @@
 package ru.santurov.task_management_system.services.mapper;
 
 import org.mapstruct.*;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.*;
 import ru.santurov.task_management_system.models.Task;

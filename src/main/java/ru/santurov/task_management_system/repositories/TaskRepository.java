@@ -9,4 +9,5 @@ import ru.santurov.task_management_system.models.Task;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
     Page<Task> findTasksByAuthor_Id(Long authorId, Pageable pageable);
+    Page<Task> findTasksByPerformers_Id(Long performerId, Pageable pageable);
 }
