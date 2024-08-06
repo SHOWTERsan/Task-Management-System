@@ -54,9 +54,13 @@ public class TaskController {
             @Parameter(description = "Номер страницы для пагинации", example = "0")
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Размер страницы для пагинации", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Фильтр по статусу задачи", example = "PROCESSING")
+            @RequestParam(required = false) String status,
+            @Parameter(description = "Фильтр по приоритету задачи", example = "HIGH")
+            @RequestParam(required = false) String priority) {
 
-        PaginatedResponseDTO<TaskCommentResponseDTO> paginatedTasks = taskService.getTasksByAuthorWithComments(authorId, page, size);
+        PaginatedResponseDTO<TaskCommentResponseDTO> paginatedTasks = taskService.getTasksByAuthorWithComments(authorId, page, size, status, priority);
         return ResponseEntity.ok(paginatedTasks);
     }
 
@@ -67,9 +71,13 @@ public class TaskController {
             @Parameter(description = "Номер страницы для пагинации", example = "0")
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Размер страницы для пагинации", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Фильтр по статусу задачи", example = "PROCESSING")
+            @RequestParam(required = false) String status,
+            @Parameter(description = "Фильтр по приоритету задачи", example = "HIGH")
+            @RequestParam(required = false) String priority) {
 
-        PaginatedResponseDTO<TaskCommentResponseDTO> paginatedTasks = taskService.getTasksByPerformerWithComments(performerId, page, size);
+        PaginatedResponseDTO<TaskCommentResponseDTO> paginatedTasks = taskService.getTasksByPerformerWithComments(performerId, page, size, status, priority);
         return ResponseEntity.ok(paginatedTasks);
     }
 
@@ -79,8 +87,12 @@ public class TaskController {
             @Parameter(description = "Номер страницы для пагинации", example = "0")
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Размер страницы для пагинации", example = "10")
-            @RequestParam(defaultValue = "10") int size) {
-        PaginatedResponseDTO<TaskResponseDTO> paginatedTasks = taskService.getTasks(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Фильтр по статусу задачи", example = "PROCESSING")
+            @RequestParam(required = false) String status,
+            @Parameter(description = "Фильтр по приоритету задачи", example = "HIGH")
+            @RequestParam(required = false) String priority) {
+        PaginatedResponseDTO<TaskResponseDTO> paginatedTasks = taskService.getTasks(page, size, status, priority);
         return ResponseEntity.ok(paginatedTasks);
     }
 
