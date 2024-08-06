@@ -21,9 +21,10 @@ public interface TaskMapper {
     @Mapping(target = "comments", expression = "java(commentResolver.resolveCommentsByTaskId(task.getId()))")
     TaskCommentResponseDTO toTaskCommentResponseDTO(Task task, @Context CommentResolver commentResolver);
 
+    @Mapping(target = "author", expression = "java(userResolver.resolveCurrentUser())")
     @Mapping(target = "performers", expression = "java(taskCreateDTO.getPerformers().stream().map(userResolver::resolveByUsername).toList())")
     @Mapping(target = "status", constant = "PENDING")
-    Task toTask(TaskCreateDTO taskCreateDTO, @Context UserResolver userResolver, @Context SecurityContextHolder securityContext);
+    Task toTask(TaskCreateDTO taskCreateDTO, @Context UserResolver userResolver);
 
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "performers", ignore = true)
