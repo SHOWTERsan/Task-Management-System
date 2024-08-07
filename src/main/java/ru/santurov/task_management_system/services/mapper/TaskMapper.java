@@ -13,8 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {UserResolver.class, CommentResolver.class})
 public interface TaskMapper {
 
-    @Mapping(target = "author", source = "author")
-    @Mapping(target = "performers", source = "performers")
     TaskResponseDTO toTaskResponseDTO(Task task);
 
     @Mapping(target = "comments", expression = "java(commentResolver.resolveCommentsByTaskId(task.getId()))")

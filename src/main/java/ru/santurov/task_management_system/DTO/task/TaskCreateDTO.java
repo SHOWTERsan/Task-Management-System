@@ -9,9 +9,4 @@ import lombok.EqualsAndHashCode;
 @Data
 @Schema(description = "DTO для создания задания")
 public class TaskCreateDTO extends BaseTaskDTO {
-
-    @Schema(description = "Название задания", example = "Fix bug in login")
-    @NotBlank(message = "Название не может быть пустым")
-    private String title;
-
 }
