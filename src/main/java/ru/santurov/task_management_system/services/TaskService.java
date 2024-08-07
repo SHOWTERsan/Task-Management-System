@@ -111,16 +111,14 @@ public class TaskService {
                 tasksPage.getTotalElements()
         );
     }
+
     @Transactional
     public void deleteTask(Long id) {
         try {
             Task task = taskRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Задание не найдено."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Задача с id " + id + " не найдена"));
             if (!taskAuthorizationService.canUpdateTask(task))
                 throw new InsufficientPermissionsException("Нужно быть автором задачи чтобы удалить.");
-            if (!taskRepository.existsById(id)) {
-                throw new ResourceNotFoundException("Задача с id " + id + " не найдена");
-            }
             taskRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException("Задача с id " + id + " не найдена");
