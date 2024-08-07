@@ -21,6 +21,10 @@ public class PaginatedResponseDTO<T> {
     @Schema(description = "Общее количество элементов", example = "100")
     private long totalItems;
 
+    public PaginatedResponseDTO() {
+
+    }
+
     public PaginatedResponseDTO(List<T> data, int currentPage, int totalPages, long totalItems) {
         this.data = data;
         this.currentPage = currentPage;
