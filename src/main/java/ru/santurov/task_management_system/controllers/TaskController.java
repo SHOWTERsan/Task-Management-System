@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.*;
@@ -19,7 +20,7 @@ public class TaskController {
 
     @Operation(summary = "Создание задания")
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> createTask(@RequestBody @Valid TaskCreateDTO taskCreateDTO) {
+    public ResponseEntity<TaskResponseDTO> createTask(@RequestBody @Validated(CreateValidationGroup.class) TaskCreateDTO taskCreateDTO) {
         TaskResponseDTO taskResponseDTO = taskService.createTask(taskCreateDTO);
         return ResponseEntity.ok(taskResponseDTO);
     }

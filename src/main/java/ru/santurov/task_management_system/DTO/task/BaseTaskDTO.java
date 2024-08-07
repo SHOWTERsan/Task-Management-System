@@ -13,7 +13,7 @@ import java.util.List;
 public class BaseTaskDTO {
 
     @Schema(description = "Название задачи", example = "Fix bug in login")
-    @NotBlank(message = "Название задачи не может быть пустым")
+    @NotBlank(message = "Название задачи не может быть пустым", groups = CreateValidationGroup.class)
     private String title;
 
     @Schema(description = "Описание задачи", example = "Fix the bug that causes login failure for users")
@@ -21,10 +21,10 @@ public class BaseTaskDTO {
 
     @Pattern(regexp = "(?i)HIGH|MEDIUM|LOW", message = "Указан неверный приоритет")
     @Schema(description = "Приоритет задачи (возможные значения: HIGH, MEDIUM, LOW)", example = "HIGH")
-    @NotBlank(message = "Приоритет задачи не может быть пустым")
+    @NotBlank(message = "Приоритет задачи не может быть пустым", groups = CreateValidationGroup.class)
     private String priority;
 
     @Schema(description = "Исполнители задачи", example = "[\"Jon\", \"Anna\", \"Vasya\"]")
-    @NotEmpty(message = "Нужно указать исполнителей задачи")
+    @NotEmpty(message = "Нужно указать исполнителей задачи", groups = CreateValidationGroup.class)
     private List<String> performers;
 }
