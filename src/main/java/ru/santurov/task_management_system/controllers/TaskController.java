@@ -19,7 +19,7 @@ public class TaskController {
 
     @Operation(summary = "Создание задания")
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> createTask(@RequestBody TaskCreateDTO taskCreateDTO) {
+    public ResponseEntity<TaskResponseDTO> createTask(@RequestBody @Valid TaskCreateDTO taskCreateDTO) {
         TaskResponseDTO taskResponseDTO = taskService.createTask(taskCreateDTO);
         return ResponseEntity.ok(taskResponseDTO);
     }
