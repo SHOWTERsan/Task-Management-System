@@ -18,7 +18,7 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     public CommentResponseDTO createComment(CommentCreateDTO commentCreateDTO, Long taskId) {
-        Comment comment = commentMapper.toComment(commentCreateDTO, taskId, userResolver,taskResolver, new SecurityContextHolder());
+        Comment comment = commentMapper.toComment(commentCreateDTO, taskId, userResolver,taskResolver , new SecurityContextHolder());
         comment = commentRepository.save(comment);
         return commentMapper.toCommentResponse(comment);
     }
