@@ -1,15 +1,12 @@
 package ru.santurov.task_management_system;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.*;
@@ -17,7 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.santurov.task_management_system.DTO.UserDTO;
 import ru.santurov.task_management_system.DTO.comment.CommentResponseDTO;
 import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.PaginatedResponseDTO;
@@ -25,7 +21,6 @@ import ru.santurov.task_management_system.DTO.task.TaskCreateDTO;
 import ru.santurov.task_management_system.DTO.task.TaskResponseDTO;
 import ru.santurov.task_management_system.DTO.task.TaskUpdateDTO;
 import ru.santurov.task_management_system.models.Task;
-import ru.santurov.task_management_system.models.User;
 import ru.santurov.task_management_system.services.TaskService;
 import ru.santurov.task_management_system.services.UserResolver;
 import ru.santurov.task_management_system.services.mapper.TaskMapper;
@@ -34,7 +29,6 @@ import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
 public class TaskControllerTest {
 
     @Autowired
