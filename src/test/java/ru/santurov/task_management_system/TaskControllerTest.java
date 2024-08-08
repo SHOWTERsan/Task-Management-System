@@ -17,12 +17,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.santurov.task_management_system.DTO.UserDTO;
+import ru.santurov.task_management_system.DTO.comment.CommentResponseDTO;
 import ru.santurov.task_management_system.DTO.comment.TaskCommentResponseDTO;
 import ru.santurov.task_management_system.DTO.task.PaginatedResponseDTO;
 import ru.santurov.task_management_system.DTO.task.TaskCreateDTO;
 import ru.santurov.task_management_system.DTO.task.TaskResponseDTO;
 import ru.santurov.task_management_system.DTO.task.TaskUpdateDTO;
 import ru.santurov.task_management_system.models.Task;
+import ru.santurov.task_management_system.models.User;
 import ru.santurov.task_management_system.services.TaskService;
 import ru.santurov.task_management_system.services.UserResolver;
 import ru.santurov.task_management_system.services.mapper.TaskMapper;
@@ -66,7 +69,6 @@ public class TaskControllerTest {
         taskResponseDTO = new TaskResponseDTO();
         taskResponseDTO.setId(1L);
 
-        // Convert DTOs using the mapper
         Task task = taskMapper.toTask(taskCreateDTO, userResolver);
         taskResponseDTO = taskMapper.toTaskResponseDTO(task);
 
@@ -144,9 +146,39 @@ public class TaskControllerTest {
 
     @Test
     @WithMockUser
+    void getTaskWithComments_Success() throws Exception {
+        CommentResponseDTO comment = new CommentResponseDTO();
+        comment.setText("This is a comment");
+
+        TaskCommentResponseDTO taskCommentResponseDTO = new TaskCommentResponseDTO();
+        taskCommentResponseDTO.setId(1L);
+        taskCommentResponseDTO.setTitle("Task with comments");
+        taskCommentResponseDTO.setComments(List.of(comment));
+
+        when(taskService.getTaskWithComments(1L)).thenReturn(taskCommentResponseDTO);
+
+        mockMvc.perform(get(BASE_URL + "/1/comments"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.title").value("Task with comments"))
+                .andExpect(jsonPath("$.comments[0].text").value("This is a comment"));
+
+        verify(taskService, times(1)).getTaskWithComments(1L);
+    }
+
+    @Test
+    @WithMockUser
     void getTasksByAuthorWithComments_Success() throws Exception {
+        CommentResponseDTO comment = new CommentResponseDTO();
+        comment.setText("This is a comment by author");
+
+        TaskCommentResponseDTO taskCommentResponseDTO = new TaskCommentResponseDTO();
+        taskCommentResponseDTO.setId(1L);
+        taskCommentResponseDTO.setTitle("Task with comments");
+        taskCommentResponseDTO.setComments(List.of(comment));
+
         PaginatedResponseDTO<TaskCommentResponseDTO> paginatedResponse = new PaginatedResponseDTO<>(
-                List.of(new TaskCommentResponseDTO()), 0, 1, 1L);
+                List.of(taskCommentResponseDTO), 0, 1, 1L);
 
         when(taskService.getTasksByAuthorWithComments(eq(1L), anyInt(), anyInt(), any(), any()))
                 .thenReturn(paginatedResponse);
@@ -155,8 +187,38 @@ public class TaskControllerTest {
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$.data[0].id").value(1L))
+                .andExpect(jsonPath("$.data[0].title").value("Task with comments"))
+                .andExpect(jsonPath("$.data[0].comments[0].text").value("This is a comment by author"));
 
         verify(taskService, times(1)).getTasksByAuthorWithComments(eq(1L), anyInt(), anyInt(), any(), any());
+    }
+
+    @Test
+    @WithMockUser
+    void getTasksByPerformerWithComments_Success() throws Exception {
+        CommentResponseDTO comment = new CommentResponseDTO();
+        comment.setText("This is a comment by performer");
+
+        TaskCommentResponseDTO taskCommentResponseDTO = new TaskCommentResponseDTO();
+        taskCommentResponseDTO.setId(1L);
+        taskCommentResponseDTO.setTitle("Task with comments");
+        taskCommentResponseDTO.setComments(List.of(comment));
+
+        PaginatedResponseDTO<TaskCommentResponseDTO> paginatedResponse = new PaginatedResponseDTO<>(
+                List.of(taskCommentResponseDTO), 0, 1, 1L);
+
+        when(taskService.getTasksByPerformerWithComments(eq(1L), anyInt(), anyInt(), any(), any()))
+                .thenReturn(paginatedResponse);
+
+        mockMvc.perform(get(BASE_URL + "/performer/1")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id").value(1L))
+                .andExpect(jsonPath("$.data[0].title").value("Task with comments"))
+                .andExpect(jsonPath("$.data[0].comments[0].text").value("This is a comment by performer"));
+
+        verify(taskService, times(1)).getTasksByPerformerWithComments(eq(1L), anyInt(), anyInt(), any(), any());
     }
 }
