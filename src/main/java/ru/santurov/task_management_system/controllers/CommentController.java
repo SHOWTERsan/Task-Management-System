@@ -1,6 +1,7 @@
 package ru.santurov.task_management_system.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class CommentController {
 
     @Operation(description = "Создание комментария по id задачи")
     @PostMapping("{taskId}")
-    public ResponseEntity<CommentResponseDTO> create(@PathVariable Long taskId, @RequestBody CommentCreateDTO commentCreateDTO) {
+    public ResponseEntity<CommentResponseDTO> create(@PathVariable Long taskId, @RequestBody @Valid CommentCreateDTO commentCreateDTO) {
         CommentResponseDTO  comment = commentService.createComment(commentCreateDTO, taskId);
         return ResponseEntity.ok(comment);
     }
