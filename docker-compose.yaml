@@ -12,8 +12,8 @@ services:
       start_period: 5s
     container_name: tms_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: qwerty123@A
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: tms
     ports:
       - "5432:5432"
