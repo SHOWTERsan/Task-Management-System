@@ -1,4 +1,4 @@
-FROM maven:3.9.7-sapmachine-21 as build
+FROM maven:3.9.7-eclipse-temurin-21 as build
 # Copy Maven files for dependency resolution
 COPY pom.xml ./
 COPY .mvn .mvn
