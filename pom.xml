@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>ru.santurov</groupId>
 	<artifactId>task-management-system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>task-management-system</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
