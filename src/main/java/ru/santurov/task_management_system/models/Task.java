@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "task")
-public class Task {
+public class Task extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
