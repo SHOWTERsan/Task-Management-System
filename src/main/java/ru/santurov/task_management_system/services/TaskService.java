@@ -119,6 +119,9 @@ public class TaskService {
                     .orElseThrow(() -> new ResourceNotFoundException("Задача с id " + id + " не найдена"));
             if (!taskAuthorizationService.canUpdateTask(task))
                 throw new InsufficientPermissionsException("Нужно быть автором задачи чтобы удалить.");
+            task.getPerformers().clear();
+            taskRepository.save(task);
+
             taskRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException("Задача с id " + id + " не найдена");
