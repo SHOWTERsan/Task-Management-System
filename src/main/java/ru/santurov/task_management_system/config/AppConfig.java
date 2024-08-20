@@ -2,12 +2,11 @@ package ru.santurov.task_management_system.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import ru.santurov.task_management_system.repositories.CommentRepository;
 import ru.santurov.task_management_system.repositories.TaskRepository;
 import ru.santurov.task_management_system.repositories.UserRepository;
-import ru.santurov.task_management_system.services.TaskResolver;
-import ru.santurov.task_management_system.services.TaskResolverImpl;
-import ru.santurov.task_management_system.services.UserResolver;
-import ru.santurov.task_management_system.services.UserResolverImpl;
+import ru.santurov.task_management_system.services.*;
 
 @Configuration
 public class AppConfig {
