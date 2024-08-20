@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ru.santurov.task_management_system.DTO.UserDTO;
 import ru.santurov.task_management_system.DTO.comment.CommentCreateDTO;
 import ru.santurov.task_management_system.DTO.comment.CommentResponseDTO;
@@ -14,12 +13,11 @@ import ru.santurov.task_management_system.models.Task;
 import ru.santurov.task_management_system.models.User;
 import ru.santurov.task_management_system.repositories.CommentRepository;
 import ru.santurov.task_management_system.services.CommentService;
-import ru.santurov.task_management_system.services.TaskResolver1;
+import ru.santurov.task_management_system.services.TaskResolver;
 import ru.santurov.task_management_system.services.UserResolver;
 import ru.santurov.task_management_system.services.mapper.CommentMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -33,7 +31,7 @@ public class CommentServiceTest {
     private UserResolver userResolver;
 
     @Mock
-    private TaskResolver1 taskResolver;
+    private TaskResolver taskResolver;
 
     @Mock
     private CommentMapper commentMapper;

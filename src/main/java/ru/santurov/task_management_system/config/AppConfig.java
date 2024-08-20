@@ -13,11 +13,13 @@ import ru.santurov.task_management_system.services.UserResolverImpl;
 public class AppConfig {
 
     @Bean
+    @Primary
     public TaskResolver taskResolver(TaskRepository taskRepository) {
         return new TaskResolverImpl(taskRepository);
     }
 
     @Bean
+    @Primary
     public UserResolver userResolver(UserRepository userRepository) {
         return new UserResolverImpl(userRepository);
     }
