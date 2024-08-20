@@ -77,14 +77,14 @@ public class TaskServiceTest {
         TaskCreateDTO createDTO = new TaskCreateDTO();
         Task task = new Task();
 
-        when(taskMapper.toTask(createDTO, userResolver)).thenReturn(task);
+        when(taskMapper.toTask(createDTO)).thenReturn(task);
         when(taskRepository.save(task)).thenReturn(task);
         when(taskMapper.toTaskResponseDTO(task)).thenReturn(new TaskResponseDTO());
 
         TaskResponseDTO result = taskService.createTask(createDTO);
 
         assertNotNull(result);
-        verify(taskMapper).toTask(createDTO,userResolver);
+        verify(taskMapper).toTask(createDTO);
         verify(taskRepository).save(task);
         verify(taskMapper).toTaskResponseDTO(task);
     }
@@ -104,7 +104,7 @@ public class TaskServiceTest {
         assertNotNull(result);
         verify(taskRepository).findById(1L);
         verify(taskAuthorizationService).canUpdateTask(task);
-        verify(taskMapper).updateTaskFromDto(updateDTO, task, userResolver);
+        verify(taskMapper).updateTaskFromDto(updateDTO, task);
         verify(taskRepository).save(task);
         verify(taskMapper).toTaskResponseDTO(task);
     }

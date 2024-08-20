@@ -63,7 +63,7 @@ public class TaskControllerTest {
         taskResponseDTO = new TaskResponseDTO();
         taskResponseDTO.setId(1L);
 
-        Task task = taskMapper.toTask(taskCreateDTO, userResolver);
+        Task task = taskMapper.toTask(taskCreateDTO);
         taskResponseDTO = taskMapper.toTaskResponseDTO(task);
 
         when(taskService.createTask(any(TaskCreateDTO.class))).thenReturn(taskResponseDTO);

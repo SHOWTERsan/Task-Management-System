@@ -42,7 +42,7 @@ public class TaskService {
     }
 
     public TaskResponseDTO createTask(TaskCreateDTO taskCreateDTO) {
-        Task task = taskMapper.toTask(taskCreateDTO, userResolver);
+        Task task = taskMapper.toTask(taskCreateDTO);
         task = taskRepository.save(task);
         return taskMapper.toTaskResponseDTO(task);
     }
@@ -52,10 +52,10 @@ public class TaskService {
                 .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена."));
 
         if (taskAuthorizationService.canUpdateTask(task)) {
-            taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
-            taskMapper.updatePerformers(taskUpdateDTO, task, userResolver);
+            taskMapper.updateTaskFromDto(taskUpdateDTO, task);
+            taskMapper.updatePerformers(taskUpdateDTO, task);
         } else if (taskAuthorizationService.canUpdateTaskStatus(task, taskUpdateDTO)) {
-            taskMapper.updateTaskFromDto(taskUpdateDTO, task, userResolver);
+            taskMapper.updateTaskFromDto(taskUpdateDTO, task);
         } else {
             throw new InsufficientPermissionsException("Недостаточно прав для выполнения этого действия.");
         }
