@@ -14,7 +14,7 @@ import ru.santurov.task_management_system.models.Task;
 import ru.santurov.task_management_system.models.User;
 import ru.santurov.task_management_system.repositories.CommentRepository;
 import ru.santurov.task_management_system.services.CommentService;
-import ru.santurov.task_management_system.services.TaskResolver;
+import ru.santurov.task_management_system.services.TaskResolver1;
 import ru.santurov.task_management_system.services.UserResolver;
 import ru.santurov.task_management_system.services.mapper.CommentMapper;
 
@@ -33,7 +33,7 @@ public class CommentServiceTest {
     private UserResolver userResolver;
 
     @Mock
-    private TaskResolver taskResolver;
+    private TaskResolver1 taskResolver;
 
     @Mock
     private CommentMapper commentMapper;
@@ -64,7 +64,7 @@ public class CommentServiceTest {
         expectedResponse.setText("This is a test comment");
         expectedResponse.setAuthor(user);
 
-        when(commentMapper.toComment(eq(commentCreateDTO), eq(1L), eq(userResolver), eq(taskResolver), any(SecurityContextHolder.class)))
+        when(commentMapper.toComment(eq(commentCreateDTO), eq(1L)))
                 .thenReturn(comment);
         when(commentRepository.save(comment)).thenReturn(comment);
         when(commentMapper.toCommentResponse(comment)).thenReturn(expectedResponse);

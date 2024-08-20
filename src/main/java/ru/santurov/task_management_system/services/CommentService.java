@@ -13,12 +13,10 @@ import ru.santurov.task_management_system.services.mapper.CommentMapper;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final UserResolver userResolver;
-    private final TaskResolver taskResolver;
     private final CommentMapper commentMapper;
 
     public CommentResponseDTO createComment(CommentCreateDTO commentCreateDTO, Long taskId) {
-        Comment comment = commentMapper.toComment(commentCreateDTO, taskId, userResolver,taskResolver , new SecurityContextHolder());
+        Comment comment = commentMapper.toComment(commentCreateDTO, taskId);
         comment = commentRepository.save(comment);
         return commentMapper.toCommentResponse(comment);
     }
