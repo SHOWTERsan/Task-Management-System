@@ -22,4 +22,10 @@ public class AppConfig {
     public UserResolver userResolver(UserRepository userRepository) {
         return new UserResolverImpl(userRepository);
     }
+
+    @Bean
+    @Primary
+    public CommentResolver commentResolver(CommentRepository commentRepository) {
+        return new CommentResolverImpl(commentRepository);
+    }
 }

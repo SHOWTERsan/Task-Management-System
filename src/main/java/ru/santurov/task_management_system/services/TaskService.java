@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserResolver userResolver;
-    private final CommentResolver commentResolver;
     private final TaskMapper taskMapper;
     private final TaskAuthorizationService taskAuthorizationService;
 
@@ -38,7 +36,7 @@ public class TaskService {
     public TaskCommentResponseDTO getTaskWithComments(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена."));
-        return taskMapper.toTaskCommentResponseDTO(task, commentResolver);
+        return taskMapper.toTaskCommentResponseDTO(task);
     }
 
     public TaskResponseDTO createTask(TaskCreateDTO taskCreateDTO) {
@@ -86,7 +84,7 @@ public class TaskService {
             throw new ResourceNotFoundException("Автор с id " + authorId + " не существует или нее имеет опубликованных задач.");
         }
         List<TaskCommentResponseDTO> taskDTOs = tasksPage.stream()
-                .map((Task task) -> taskMapper.toTaskCommentResponseDTO(task, commentResolver))
+                .map(taskMapper::toTaskCommentResponseDTO)
                 .collect(Collectors.toList());
         return new PaginatedResponseDTO<>(
                 taskDTOs,
@@ -102,7 +100,7 @@ public class TaskService {
             throw new ResourceNotFoundException("Исполнитель с id " + performerId + " не существует или нее имеет задач.");
         }
         List<TaskCommentResponseDTO> taskDTOs = tasksPage.stream()
-                .map((Task task) -> taskMapper.toTaskCommentResponseDTO(task, commentResolver))
+                .map(taskMapper::toTaskCommentResponseDTO)
                 .collect(Collectors.toList());
         return new PaginatedResponseDTO<>(
                 taskDTOs,

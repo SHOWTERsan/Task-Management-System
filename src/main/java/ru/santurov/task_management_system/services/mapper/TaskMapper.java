@@ -11,16 +11,19 @@ import ru.santurov.task_management_system.services.UserResolver;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UserResolver.class, CommentResolver.class})
+@Mapper(componentModel = "spring")
 public abstract class TaskMapper {
 
     @Autowired
     protected UserResolver userResolver;
 
+    @Autowired
+    protected CommentResolver commentResolver;
+
     public abstract TaskResponseDTO toTaskResponseDTO(Task task);
 
     @Mapping(target = "comments", expression = "java(commentResolver.resolveCommentsByTaskId(task.getId()))")
-    public abstract TaskCommentResponseDTO toTaskCommentResponseDTO(Task task, @Context CommentResolver commentResolver);
+    public abstract TaskCommentResponseDTO toTaskCommentResponseDTO(Task task);
 
     @Mapping(target = "author", expression = "java(userResolver.resolveCurrentUser())")
     @Mapping(target = "performers", expression = "java(taskCreateDTO.getPerformers().stream().map(userResolver::resolveByUsername).toList())")

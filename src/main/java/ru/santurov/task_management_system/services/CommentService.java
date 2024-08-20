@@ -1,7 +1,6 @@
 package ru.santurov.task_management_system.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.santurov.task_management_system.DTO.comment.CommentCreateDTO;
 import ru.santurov.task_management_system.DTO.comment.CommentResponseDTO;
